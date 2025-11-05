@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let's Share Books Library</title>
+    <link rel="icon" type="image/png" href="images/Blue_Minimalist_Smart_Share_Technology_Logo-removebg-preview.png">
+    <link rel="stylesheet" href="style.css">
+        <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+        /* Custom styles for a premium light theme, matching the provided image */
+        :root {
+            --primary-accent: #f59e0b; /* Orange/Yellow */
+            --green-accent: #10b981; /* Green for logo (similar to the image) */
+            --bg-light: #f8f9fa; /* Light grey/off-white */
+            --card-light: #ffffff; /* Pure white for cards */
+            --text-dark: #343a40; /* Dark grey for text */
+            --text-muted: #6c757d; /* Muted grey for secondary text */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light); /* Apply light background to body */
+        }
+        .download-button {
+            transition: all 0.3s ease;
+            /* Box shadow uses the primary accent color */
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+        .download-button:hover {
+            background-color: #d97706; /* Darker orange on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+        }
+        header img{
+            height: 50px;
+        }
+        footer {
+    text-align: center;
+    padding: 25px;
+    background-color: var(--color-primary); /* Dark Navy Footer */
+    color: var(--color-light);
+    font-size: 0.9em;
+    margin-top: 40px;
+}
+    </style>
+        <script>
+        // Array of mock book data
+        const books = [
+            {
+                id: 1,
+                title: "Fundamentals of HTML",
+                author: "Knowledge Gate",
+                coverUrl: "images/asdasd.png",
+                downloadLink: "https://drive.google.com/file/d/1vGB7gHiRfBNX4cTZMDPtwU75SLCnD-1H/view?usp=sharing"
+                 // Replace with actual book file URL
+            },
+            {
+                id: 2,
+                title: "Calculus with Analytics Geometry",
+                author: "SM Yusuf",
+                coverUrl: "https://placehold.co/400x600/f8f9fa/f59e0b?text=Math+Book",
+                downloadLink: "#"
+            },
+            {
+                id: 3,
+                title: "The Starfall Engine",
+                author: "Juno Lin",
+                coverUrl: "https://placehold.co/400x600/f8f9fa/f59e0b?text=Fiction",
+                downloadLink: "#"
+            },
+            {
+                id: 4,
+                title: "Chronicles of Aethel",
+                author: "Morgan Reed",
+                coverUrl: "https://placehold.co/400x600/f8f9fa/f59e0b?text=Fantasy",
+                downloadLink: "#"
+            },
+            {
+                id: 5,
+                title: "Digital Nomad's Guide",
+                author: "Alex Kim",
+                coverUrl: "https://placehold.co/400x600/f8f9fa/f59e0b?text=Business",
+                downloadLink: "#"
+            },
+            {
+                id: 6,
+                title: "The Last Alchemist",
+                author: "Dr. L. Thorne",
+                coverUrl: "https://placehold.co/400x600/f8f9fa/f59e0b?text=Science",
+                downloadLink: "#"
+            },
+        ];
+
+        // Function to handle the download action
+        function downloadBook(title, url) {
+            console.log(`Attempting to download: ${title}`);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = title.replace(/\s/g, '_') + '.pdf'; // Suggests a filename
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            // Using the custom notification instead of alert()
+            showNotification(`Starting download for "${title}"...`);
+        }
+
+        // Custom notification function
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            // Ensure element is visible before transitioning
+            notification.classList.remove('hidden', 'opacity-0', 'translate-y-full');
+            notification.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                // Start fade-out and move-down transition
+                notification.classList.remove('opacity-100', 'translate-y-0');
+                notification.classList.add('opacity-0', 'translate-y-full');
+                // Hide element after transition completes
+                setTimeout(() => notification.classList.add('hidden'), 500);
+            }, 3000);
+        }
+
+        // Function to dynamically render book cards
+        function renderBooks() {
+            const container = document.getElementById('books-container');
+            container.innerHTML = books.map(book => `
+                <div class="bg-card-light p-4 rounded-xl shadow-md transition duration-300 hover:shadow-lg flex flex-col items-center border border-gray-100">
+                    <!-- Book Cover Image -->
+                    <div class="w-full aspect-[2/3] overflow-hidden rounded-lg shadow-sm mb-4">
+                        <img src="${book.coverUrl}" alt="${book.title} Cover"
+                             class="w-full h-full object-cover"
+                             onerror="this.onerror=null;this.src='https://placehold.co/400x600/ccc/333?text=No+Cover';"
+                        >
+                    </div>
+
+                    <!-- Book Details -->
+                    <div class="text-center w-full mb-4">
+                        <h3 class="text-lg font-bold text-text-dark mb-1" title="${book.title}">${book.title}</h3>
+                        <p class="text-xs text-text-muted">Author: ${book.author}</p>
+                    </div>
+
+                    <!-- Download Button -->
+                    <button
+                        onclick="downloadBook('${book.title.replace(/'/g, "\\'")}', '${book.downloadLink}')"
+                        class="download-button w-full py-2 px-4 bg-yellow-600 text-white font-semibold rounded-lg uppercase tracking-wider text-sm hover:bg-yellow-700"
+                    >
+                        Download PDF
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        window.onload = renderBooks;
+    </script>
+</head>
+<body>
+
+    <header>
+       <a href="index.html"><img src="images/Gemini_Generated_Image_vdewpxvdewpxvdew.png" alt="Let's Learn Logo"></a>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#notes-section">View Notes</a></li>
+                <li><a href="contactus.html">Contact Us</a></li>
+            </ul>
+        </nav>
+        <!-- Search bar -->
+        <div class="search-bar">
+            <input type="text" placeholder="Find notes..." id="search-input">
+            <button type="button" id="search-btn">Find</button>
+        </div>
+    </header>
+    <body class="min-h-screen text-text-dark">
+
+
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        
+        <!-- Large Rounded Content Wrapper (Matching image's central box) -->
+        <div class="bg-white p-6 sm:p-10 rounded-3xl shadow-xl border border-gray-100">
+
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 sm:mb-10">
+                Available Books for Download
+            </h2>
+
+            <!-- Books Grid Container -->
+            <div id="books-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 sm:gap-8">
+                <!-- Book cards will be injected here by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Custom Notification/Message Box -->
+        <div id="notification"
+             class="fixed bottom-6 right-6 bg-yellow-600 text-white px-6 py-3 rounded-lg shadow-2xl font-semibold transition-all duration-500 transform translate-y-full opacity-0 hidden z-50">
+            Notification Message
+        </div>
+
+    </main>
+       <footer>
+        <p>&copy; 2025 Books Sharing Platform</p>
+    </footer>
+
+
+</body>
+</body>
+</html>
