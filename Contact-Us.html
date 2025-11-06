@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Let's Learn</title>
+    <link rel="icon" type="image/png" href="images/Blue_Minimalist_Smart_Share_Technology_Logo-removebg-preview.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* --- Contact Page Styles (To ensure consistency with main site) --- */
+
+        :root {
+            --color-primary: #000000;
+            --color-accent: #50b748;
+            --color-background: #ffffff;
+            --color-light-gray: #f2f2f2;
+            --color-text-light: #555;
+            --color-form-bg: #fff;
+            --color-button-base: #f7a01a; /* Base color for the button */
+            --color-button-hover: #e09015; /* Slightly darker hover color */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--color-background);
+            color: var(--color-primary);
+        }
+        
+        /* --- Header Styles (Copied from index.html for consistency) --- */
+        header {
+            padding: 20px 80px; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 50px; 
+        }
+
+        .primary-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        .primary-nav ul li {
+            margin-left: 30px;
+        }
+
+        .primary-nav ul li a {
+            font-weight: bold;
+            font-size: 1.1em;
+            padding: 5px 0;
+            color: #000000;
+            text-decoration: none;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        .primary-nav ul li a:hover {
+            color: var(--color-accent); 
+            text-decoration: none;
+        }
+        
+        .primary-nav ul li a i {
+            margin-right: 5px;
+        }
+
+        /* --- Main Content and Form Layout --- */
+
+        main {
+            padding: 40px 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 70vh;
+        }
+
+        .contact-container {
+            max-width: 700px;
+            margin: 30px auto;
+            background-color: var(--color-form-bg);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-container h2 {
+            font-size: 2em;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--color-primary);
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* --- Form Elements Styling --- */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--color-accent);
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        /* Submit Button */
+        #contact-form button {
+            background-color: var(--color-button-base);
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            width: 100%;
+            transition: background-color 0.3s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #contact-form button:hover:not(:disabled) {
+            background-color: var(--color-button-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        #contact-form button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin-left: 10px; /* Adjusted margin to the left of the spinner */
+        }
+        
+        .spinner.hidden {
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Message Box for Status */
+        #status-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            display: none; /* Hidden by default */
+        }
+        
+        .success {
+            background-color: #e6ffe6;
+            color: #1f7a1f;
+            border: 1px solid #1f7a1f;
+        }
+        
+        .error {
+            background-color: #ffe6e6;
+            color: #cc0000;
+            border: 1px solid #cc0000;
+        }
+
+        /* --- Footer Styles (Copied from index.html for consistency) --- */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--color-background); 
+            color: var(--color-text-light);
+            border-top: 1px solid #eee;
+        }
+
+        /* --- Responsive Design for Contact Page --- */
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 20px;
+            }
+            .primary-nav {
+                order: 2;
+                margin-top: 15px;
+            }
+            .primary-nav ul {
+                flex-wrap: wrap;
+            }
+            .primary-nav ul li {
+                margin-left: 0;
+                margin-right: 20px;
+                margin-bottom: 5px;
+            }
+            main {
+                padding: 20px;
+            }
+            .contact-container {
+                padding: 30px 20px;
+                margin: 20px auto;
+            }
+            .contact-container h2 {
+                font-size: 1.5em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 10px 15px;
+            }
+            main {
+                padding: 10px;
+            }
+            .primary-nav ul li a {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <!-- Using a standard placeholder image URL -->
+            <a href="index.html">
+                <img src="images/Gemini_Generated_Image_vdewpxvdewpxvdew.png" alt="Let's Learn Logo">
+            </a> 
+        </div>
+
+        <nav class="primary-nav">
+            <ul>
+                <li><a href="index.html"> <i class="fas fa-home"></i> HOME</a></li>
+                <li><a href="Books.html"> <i class="fas fa-file-alt"></i> VIEW NOTES</a></li>
+                <li><a href="Contact-Us.html"> <i class="fas fa-envelope"></i> CONTACT US</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="contact-container">
+            <h2>Get In Touch</h2>
+            <p style="text-align: center; margin-bottom: 30px; color: var(--color-text-light);">We'd love to hear from you! Please fill out the form below.</p>
+            
+            <!-- FORM SETUP FOR WEB3FORMS -->
+            <form id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+                
+                <!-- Your Web3Forms Access Key is included here -->
+                <input type="hidden" name="access_key" value="29f1c908-04a3-4e67-9b97-91a6c6f5eb59">
+
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" name="name" required placeholder="Name.....">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Your Email</label>
+                    <input type="email" id="email" name="email" required placeholder="Email.....">
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" required placeholder="Subject....">
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" required placeholder="Your Feelings🥰"></textarea>
+                </div>
+                
+                <button type="submit" id="submitButton">
+                    <span id="buttonText">Send Message</span>
+                    <span class="spinner hidden" id="spinner"></span>
+                </button>
+            </form>
+            
+            <div id="status-message"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Let's Share Offical</p>
+    </footer>
+
+    <!-- Web3Forms Submission JavaScript -->
+    <script>
+        document.getElementById('contact-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const statusMessage = document.getElementById('status-message');
+            const submitButton = document.getElementById('submitButton');
+            const buttonText = document.getElementById('buttonText');
+            const spinner = document.getElementById('spinner');
+            const originalButtonText = "Send Message";
+
+            // 1. Loading State
+            submitButton.disabled = true;
+            buttonText.textContent = 'Sending...';
+            spinner.classList.remove('hidden');
+            statusMessage.style.display = 'none';
+
+            // Gather form data
+            const formData = new FormData(form);
+
+            try {
+                // 2. Submit data to Web3Forms API using standard fetch
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // 3. Show success
+                    statusMessage.textContent = "Thank you! Your message has been submitted successfully.";
+                    statusMessage.className = 'success';
+                    statusMessage.style.display = 'block';
+                    form.reset();
+                } else {
+                    // 4. Show Web3Forms error
+                    console.error("Web3Forms Error:", data);
+                    statusMessage.textContent = `Error: ${data.message || 'Submission failed. Please check your access key or network.'}`;
+                    statusMessage.className = 'error';
+                    statusMessage.style.display = 'block';
+                }
+
+            } catch (error) {
+                // 5. Show network/fetch error
+                console.error("Network Error:", error);
+                statusMessage.textContent = `A network error occurred. Please check your internet connection.`;
+                statusMessage.className = 'error';
+                statusMessage.style.display = 'block';
+            } finally {
+                // 6. Reset button state
+                submitButton.disabled = false;
+                buttonText.textContent = originalButtonText;
+                spinner.classList.add('hidden');
+                
+                // Hide the message after 5 seconds
+                setTimeout(() => {
+                    statusMessage.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
