@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +21,8 @@
         </nav>
         <!-- Search bar -->
         <div class="search-bar">
-            <input type="text" placeholder="Find notes..." id="search-input">
+            <!-- Changed placeholder from 'Find notes...' to 'Find books...' -->
+            <input type="text" placeholder="Find books by title or author..." id="search-input">
             <button type="button" id="search-btn">Find</button>
         </div>
     </header>
@@ -32,21 +34,49 @@
             <section id="notes-section" class="main-content">
                 <h2>Available Notes for Download</h2>
                 
-                <div class="note-card">
-                    <h3>Fundamentals of HTML</h3>
-                    <p><strong>Subject:</strong> Computer</p>
-                    <p><strong>Shared By:</strong> Admin</p>
-                     <p><strong>Author:</strong> Knowledge Gate</p>
-                    <a href="https://drive.google.com/file/d/1vGB7gHiRfBNX4cTZMDPtwU75SLCnD-1H/view?usp=sharing" download target="_blank">Download Note (PDF)</a>
-                </div>
+                <div id="notes-display" class="grid-container">
+                    <!-- Note Card 1 -->
+                    <div class="note-card" data-keywords="introduction to python programming computer science basic code">
+                        <h3>Introduction to Python</h3>
+                        <p><strong>Subject:</strong> Computer</p>
+                        <p><strong>Shared By:</strong> Admin</p>
+                        <p><strong>Author:</strong> Knowledge Gate</p>
+                        <a href="https://drive.google.com/file/d/1vGB7gHiRfBNX4cTZMDPtwU75SLCnD-1H/view?usp=sharing" download target="_blank">Download Note (PDF)</a>
+                    </div>
 
-                <div class="note-card">
-                    <h3>Calculas with Analytics Geometry</h3>
-                    <p><strong>Subject:</strong> Math</p>
-                    <p><strong>Shared By:</strong> Admin</p>
-                    <p><strong>Author:</strong> SM Yusuf</p>
-                    <a href="https://drive.google.com/file/d/1t0oVlhVaSjovdhrCfmz3Gty_ZBmdltpP/view?usp=sharing" target="_blank" download>Download Note (PDF)</a>
+                    <!-- Note Card 2 -->
+                    <div class="note-card" data-keywords="calculus analytic geometry math mathematics sm yusuf functions derivatives">
+                        <h3>Calculas with Analytics Geometry</h3>
+                        <p><strong>Subject:</strong> Math</p>
+                        <p><strong>Shared By:</strong> Admin</p>
+                        <p><strong>Author:</strong> SM Yusuf</p>
+                        <a href="https://drive.google.com/file/d/1t0oVlhVaSjovdhrCfmz3Gty_ZBmdltpP/view?usp=sharing" target="_blank" download>Download Note (PDF)</a>
+                    </div>
+                    
+                    <!-- Note Card 3 (New Example) -->
+                    <div class="note-card" data-keywords="world history modern ages civilizations europe asia conflict">
+                        <h3>Modern World History</h3>
+                        <p><strong>Subject:</strong> History</p>
+                        <p><strong>Shared By:</strong> Educator</p>
+                        <p><strong>Author:</strong> H.G. Wells</p>
+                        <a href="#" download target="_blank">Download Note (PDF)</a>
+                    </div>
+                    
+                    <!-- Note Card 4 (New Example) -->
+                    <div class="note-card" data-keywords="organic chemistry carbon compounds reactions biochemistry science lab">
+                        <h3>Fundamentals of Organic Chemistry</h3>
+                        <p><strong>Subject:</strong> Chemistry</p>
+                        <p><strong>Shared By:</strong> Researcher</p>
+                        <p><strong>Author:</strong> Paula Yurkanis Bruice</p>
+                        <a href="#" download target="_blank">Download Note (PDF)</a>
+                    </div>
                 </div>
+                
+                <!-- Search Feedback Message -->
+                <p id="search-message" style="display: none; color: var(--color-accent); font-weight: bold; margin-top: 20px;">
+                    No notes found matching your search term.
+                </p>
+
             </section>
 
             <!-- Right Sidebar for Latest Posts -->
@@ -67,6 +97,52 @@
         <p>&copy; 2025 Books Sharing Platform</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-btn');
+            const noteCards = document.querySelectorAll('#notes-section .note-card');
+            const searchMessage = document.getElementById('search-message');
+
+            const filterCards = () => {
+                // Get the search term and normalize it for case-insensitive comparison
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                let resultsFound = false;
+
+                noteCards.forEach(card => {
+                    // Check for the search term in the card's text content OR data-keywords
+                    const cardText = card.textContent.toLowerCase();
+                    const cardKeywords = card.getAttribute('data-keywords') ? card.getAttribute('data-keywords').toLowerCase() : '';
+                    
+                    if (cardText.includes(searchTerm) || cardKeywords.includes(searchTerm)) {
+                        card.style.display = 'block'; // Show the card
+                        resultsFound = true;
+                    } else {
+                        card.style.display = 'none'; // Hide the card
+                    }
+                });
+
+                // Display or hide the "No results found" message
+                if (!resultsFound) {
+                    searchMessage.style.display = 'block';
+                } else {
+                    searchMessage.style.display = 'none';
+                }
+            };
+
+            // 1. Filter when the "Find" button is clicked
+            searchButton.addEventListener('click', filterCards);
+
+            // 2. Filter when the user types in the input (real-time search)
+            searchInput.addEventListener('input', filterCards);
+            
+            // 3. Filter when the user presses 'Enter' in the input field
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    filterCards();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

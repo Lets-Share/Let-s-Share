@@ -182,6 +182,65 @@
             color: var(--color-text-light);
             border-top: 1px solid #eee;
         }
+
+        /* Add this to the end of the <style> block in contactus.html */
+
+/* --- Responsive Design for Contact Page --- */
+
+@media (max-width: 768px) {
+    /* Adjust header layout */
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px 20px;
+    }
+    
+    /* Move nav below logo/title */
+    .primary-nav {
+        order: 2;
+        margin-top: 15px;
+    }
+
+    .primary-nav ul {
+        flex-wrap: wrap; /* Allow nav items to wrap */
+    }
+
+    .primary-nav ul li {
+        margin-left: 0;
+        margin-right: 20px;
+        margin-bottom: 5px;
+    }
+
+    /* Adjust main content padding */
+    main {
+        padding: 20px;
+    }
+    
+    /* Adjust contact container padding */
+    .contact-container {
+        padding: 30px 20px;
+        margin: 20px auto;
+    }
+
+    .contact-container h2 {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Further reduce padding for small screens */
+    header {
+        padding: 10px 15px;
+    }
+    
+    main {
+        padding: 10px;
+    }
+    
+    .primary-nav ul li a {
+        font-size: 0.9em;
+    }
+}
     </style>
 </head>
 <body>
@@ -195,7 +254,7 @@
         <nav class="primary-nav">
             <ul>
                 <li><a href="index.html"> <i class="fas fa-home"></i> HOME</a></li>
-                <li><a href="#"> <i class="fas fa-file-alt"></i> VIEW NOTES</a></li>
+                <li><a href="Books.html"> <i class="fas fa-file-alt"></i> VIEW NOTES</a></li>
                 <li><a href="contactus.html"> <i class="fas fa-envelope"></i> CONTACT US</a></li>
             </ul>
         </nav>

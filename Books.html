@@ -32,18 +32,81 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
         }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: var(--card-light);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
         header img{
             height: 50px;
         }
+        /* Custom styling for the search bar to ensure it looks integrated */
+        .search-bar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .search-bar input {
+            padding: 8px 12px;
+            font-size: 14px;
+            width: 200px; /* Default desktop width */
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-bar input:focus {
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 0 1px var(--primary-accent);
+        }
+        .search-bar button {
+            background-color: var(--primary-accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+        .search-bar button:hover {
+            background-color: #d97706;
+            transform: translateY(-1px);
+        }
+        /* Responsive adjustments for the header/search bar */
+        @media (max-width: 768px) {
+             header {
+                flex-direction: column;
+                padding: 15px 20px;
+                gap: 15px;
+            }
+            nav ul {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            nav li {
+                margin: 0 8px;
+            }
+            .search-bar {
+                width: 100%;
+                justify-content: center;
+            }
+            .search-bar input {
+                flex-grow: 1;
+                width: auto;
+            }
+        }
+        /* Footer styling */
         footer {
-    text-align: center;
-    padding: 25px;
-    background-color: var(--color-primary); /* Dark Navy Footer */
-    color: var(--color-light);
-    font-size: 0.9em;
-    margin-top: 40px;
-}
-    </style>
+            text-align: center;
+            padding: 25px;
+            background-color: var(--text-dark); /* Using dark text color for a sleek footer */
+            color: var(--bg-light);
+            font-size: 0.9em;
+            margin-top: 40px;
+        }
+        </style>
         <script>
         // Array of mock book data
         const books = [
@@ -53,7 +116,6 @@
                 author: "Knowledge Gate",
                 coverUrl: "images/asdasd.png",
                 downloadLink: "https://drive.google.com/file/d/1vGB7gHiRfBNX4cTZMDPtwU75SLCnD-1H/view?usp=sharing"
-                 // Replace with actual book file URL
             },
             {
                 id: 2,
@@ -90,24 +152,46 @@
                 coverUrl: "https://placehold.co/400x600/f8f9fa/f59e0b?text=Science",
                 downloadLink: "#"
             },
+            {
+                id: 7,
+                title: "Introduction to JavaScript",
+                author: "Eric Elliott",
+                coverUrl: "https://placehold.co/400x600/f8f9fa/f59e0b?text=JS+Guide",
+                downloadLink: "#"
+            },
+            {
+                id: 8,
+                title: "Advanced CSS Layouts",
+                author: "Sarah Styles",
+                coverUrl: "https://placehold.co/400x600/f8f9fa/f59e0b?text=CSS+Book",
+                downloadLink: "#"
+            },
         ];
 
-        // Function to handle the download action
+        /**
+         * Function to handle the download action.
+         * @param {string} title - The title of the book.
+         * @param {string} url - The URL to the book file.
+         */
         function downloadBook(title, url) {
             console.log(`Attempting to download: ${title}`);
 
             const a = document.createElement('a');
             a.href = url;
-            a.download = title.replace(/\s/g, '_') + '.pdf'; // Suggests a filename
+            a.target = '_blank'; // Open in new tab/window
+            // a.download = title.replace(/\s/g, '_') + '.pdf'; // Suggests a filename (use if direct download is possible)
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
 
             // Using the custom notification instead of alert()
-            showNotification(`Starting download for "${title}"...`);
+            showNotification(`Opening download link for "${title}"...`);
         }
 
-        // Custom notification function
+        /**
+         * Custom notification function to display messages to the user.
+         * @param {string} message - The message to display.
+         */
         function showNotification(message) {
             const notification = document.getElementById('notification');
             notification.textContent = message;
@@ -124,63 +208,115 @@
             }, 3000);
         }
 
-        // Function to dynamically render book cards
-        function renderBooks() {
+        /**
+         * Function to dynamically render book cards based on a provided list.
+         * Also handles displaying the 'No Results' message.
+         * @param {Array<Object>} bookList - The list of book objects to render.
+         */
+        function renderBooks(bookList) {
             const container = document.getElementById('books-container');
-            container.innerHTML = books.map(book => `
-                <div class="bg-card-light p-4 rounded-xl shadow-md transition duration-300 hover:shadow-lg flex flex-col items-center border border-gray-100">
-                    <!-- Book Cover Image -->
-                    <div class="w-full aspect-[2/3] overflow-hidden rounded-lg shadow-sm mb-4">
-                        <img src="${book.coverUrl}" alt="${book.title} Cover"
-                             class="w-full h-full object-cover"
-                             onerror="this.onerror=null;this.src='https://placehold.co/400x600/ccc/333?text=No+Cover';"
+            const noResultsMessage = document.getElementById('no-results-message');
+
+            if (bookList.length === 0) {
+                container.innerHTML = ''; // Clear existing content
+                noResultsMessage.classList.remove('hidden');
+            } else {
+                noResultsMessage.classList.add('hidden');
+                container.innerHTML = bookList.map(book => `
+                    <div class="bg-card-light p-4 rounded-xl shadow-md transition duration-300 hover:shadow-lg flex flex-col items-center border border-gray-100">
+                        <!-- Book Cover Image -->
+                        <div class="w-full aspect-[2/3] overflow-hidden rounded-lg shadow-sm mb-4">
+                            <img src="${book.coverUrl}" alt="${book.title} Cover"
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null;this.src='https://placehold.co/400x600/ccc/333?text=No+Cover';"
+                            >
+                        </div>
+
+                        <!-- Book Details -->
+                        <div class="text-center w-full mb-4">
+                            <h3 class="text-lg font-bold text-text-dark mb-1" title="${book.title}">${book.title}</h3>
+                            <p class="text-xs text-text-muted">Author: ${book.author}</p>
+                        </div>
+
+                        <!-- Download Button -->
+                        <button
+                            onclick="downloadBook('${book.title.replace(/'/g, "\\'")}', '${book.downloadLink}')"
+                            class="download-button w-full py-2 px-4 bg-yellow-600 text-white font-semibold rounded-lg uppercase tracking-wider text-sm hover:bg-yellow-700"
                         >
+                            Download PDF
+                        </button>
                     </div>
-
-                    <!-- Book Details -->
-                    <div class="text-center w-full mb-4">
-                        <h3 class="text-lg font-bold text-text-dark mb-1" title="${book.title}">${book.title}</h3>
-                        <p class="text-xs text-text-muted">Author: ${book.author}</p>
-                    </div>
-
-                    <!-- Download Button -->
-                    <button
-                        onclick="downloadBook('${book.title.replace(/'/g, "\\'")}', '${book.downloadLink}')"
-                        class="download-button w-full py-2 px-4 bg-yellow-600 text-white font-semibold rounded-lg uppercase tracking-wider text-sm hover:bg-yellow-700"
-                    >
-                        Download PDF
-                    </button>
-                </div>
-            `).join('');
+                `).join('');
+            }
         }
 
-        window.onload = renderBooks;
+        /**
+         * Handles the search logic: filters the main books array and triggers rendering.
+         */
+        function searchBooks() {
+            const searchInput = document.getElementById('search-input');
+            const searchTerm = searchInput.value.toLowerCase().trim();
+
+            const filteredBooks = books.filter(book => {
+                const title = book.title.toLowerCase();
+                const author = book.author.toLowerCase();
+                // Check if the search term is in the title or the author name
+                return title.includes(searchTerm) || author.includes(searchTerm);
+            });
+
+            renderBooks(filteredBooks);
+        }
+
+        // Setup the initial rendering and all event listeners when the window loads
+        window.onload = () => {
+             // 1. Initial render of all books
+             renderBooks(books);
+
+             // 2. Setup event listeners for the search feature
+             const searchInput = document.getElementById('search-input');
+             const searchButton = document.getElementById('search-btn');
+
+             if (searchInput && searchButton) {
+                 // Real-time search as the user types
+                 searchInput.addEventListener('input', searchBooks);
+
+                 // Handle search when the 'Find' button is clicked
+                 searchButton.addEventListener('click', searchBooks);
+
+                 // Handle search when the user presses 'Enter'
+                 searchInput.addEventListener('keypress', (e) => {
+                     if (e.key === 'Enter') {
+                         searchBooks();
+                     }
+                 });
+             }
+        };
     </script>
 </head>
-<body>
+<body class="min-h-screen text-text-dark">
 
     <header>
        <a href="index.html"><img src="images/Gemini_Generated_Image_vdewpxvdewpxvdew.png" alt="Let's Learn Logo"></a>
         <nav>
             <ul>
                 <li><a href="#">Home</a></li>
-                <li><a href="#notes-section">View Notes</a></li>
+                <li><a href="#books-container">View Books</a></li>
                 <li><a href="contactus.html">Contact Us</a></li>
             </ul>
         </nav>
         <!-- Search bar -->
         <div class="search-bar">
-            <input type="text" placeholder="Find notes..." id="search-input">
+            <!-- Changed placeholder from 'Find notes...' to 'Find books...' -->
+            <input type="text" placeholder="Find books by title or author..." id="search-input">
             <button type="button" id="search-btn">Find</button>
         </div>
     </header>
-    <body class="min-h-screen text-text-dark">
 
 
 
     <!-- Main Content Area -->
     <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        
+
         <!-- Large Rounded Content Wrapper (Matching image's central box) -->
         <div class="bg-white p-6 sm:p-10 rounded-3xl shadow-xl border border-gray-100">
 
@@ -192,8 +328,21 @@
             <div id="books-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 sm:gap-8">
                 <!-- Book cards will be injected here by JavaScript -->
             </div>
+
+            <!-- No Results Message (Hidden by default) -->
+            <div id="no-results-message" class="hidden text-center mt-10 p-8 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
+                <p class="text-2xl font-semibold text-text-dark mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 inline-block mr-2 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    No Books Found
+                </p>
+                <p class="text-md text-text-muted">
+                    Sorry, your search did not match any books. Please try a different title or author name.
+                </p>
+            </div>
         </div>
-        
+
         <!-- Custom Notification/Message Box -->
         <div id="notification"
              class="fixed bottom-6 right-6 bg-yellow-600 text-white px-6 py-3 rounded-lg shadow-2xl font-semibold transition-all duration-500 transform translate-y-full opacity-0 hidden z-50">
@@ -206,6 +355,5 @@
     </footer>
 
 
-</body>
 </body>
 </html>

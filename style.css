@@ -249,3 +249,135 @@ footer {
     font-size: 0.9em;
     margin-top: 40px;
 }
+
+
+/* --- 7. Responsive Design (Tablets & Mobile) --- */
+
+/* For screens up to 1024px (Typical Tablet Landscape) */
+@media (max-width: 1024px) {
+    header {
+        padding: 15px 40px; /* Reduce padding */
+    }
+
+    main {
+        padding: 30px 40px;
+    }
+
+    /* Adjust the display for the main content and sidebar */
+    .content-wrapper {
+        display: block !important; /* Forces the main content and sidebar to stack */
+    }
+
+    .main-content {
+        width: 100% !important; /* Full width for main content */
+        margin-bottom: 30px; /* Add space below main content */
+    }
+
+    .sidebar {
+        width: 100% !important; /* Full width for sidebar */
+    }
+}
+
+/* For screens up to 768px (Typical Tablet Portrait / Large Mobile) */
+@media (max-width: 768px) {
+    /* Stack header elements: Logo/Nav and Search */
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px 20px;
+    }
+
+    /* Move navigation below the logo */
+    nav {
+        order: 2; /* Move nav below logo/title */
+        margin-top: 15px;
+    }
+
+    nav ul {
+        flex-wrap: wrap; /* Allow navigation items to wrap */
+    }
+
+    nav ul li {
+        margin-left: 0;
+        margin-right: 20px;
+        margin-bottom: 5px;
+    }
+
+    /* Move search bar below the nav */
+    .search-bar {
+        order: 3;
+        width: 100%;
+        max-width: none;
+        margin-top: 15px;
+    }
+
+    /* Full width for search input */
+    .search-bar input {
+        flex-grow: 1;
+        width: 100%;
+    }
+    
+    main {
+        padding: 20px;
+    }
+
+    section {
+        padding: 25px; /* Reduce section padding */
+    }
+
+    /* Adjust the grid for note cards */
+    #notes-display {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .note-card {
+        margin: 0; /* Remove extra margin from note cards */
+    }
+}
+
+/* For screens up to 480px (Typical Mobile) */
+@media (max-width: 480px) {
+    /* Ensure only a single column for note cards on small phones */
+    #notes-display {
+        grid-template-columns: 1fr;
+    }
+    
+    header {
+        padding: 10px 15px;
+    }
+    
+    nav ul li a {
+        font-size: 0.9em;
+    }
+}
+        /* Custom styling for the search bar to ensure it looks integrated */
+        .search-bar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .search-bar input {
+            padding: 8px 12px;
+            font-size: 14px;
+            width: 200px; /* Default desktop width */
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-bar input:focus {
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 0 1px var(--primary-accent);
+        }
+        .search-bar button {
+            background-color: #d97706;
+            color: rgb(255, 255, 255);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+        .search-bar button:hover {
+            background-color: #d97706;
+            transform: translateY(-1px);
+        }
