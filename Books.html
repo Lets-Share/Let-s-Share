@@ -24,6 +24,7 @@
         }
         .download-button {
             transition: all 0.3s ease;
+            cursor: pointer;
             /* Box shadow uses the primary accent color */
             box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
         }
@@ -53,6 +54,8 @@
             padding: 8px 12px;
             font-size: 14px;
             width: 200px; /* Default desktop width */
+            border: 1px solid #ccc;
+            border-radius: 8px; /* Added border-radius */
             outline: none;
             transition: border-color 0.2s;
         }
@@ -75,10 +78,14 @@
         }
         /* Responsive adjustments for the header/search bar */
         @media (max-width: 768px) {
-             header {
+            header {
                 flex-direction: column;
                 padding: 15px 20px;
                 gap: 15px;
+            }
+            nav {
+                order: 2; /* Puts nav below logo/search */
+                width: 100%;
             }
             nav ul {
                 display: flex;
@@ -87,8 +94,10 @@
             }
             nav li {
                 margin: 0 8px;
+                flex-basis: auto; /* Allows links to shrink/grow */
             }
             .search-bar {
+                order: 3;
                 width: 100%;
                 justify-content: center;
             }
@@ -97,6 +106,7 @@
                 width: auto;
             }
         }
+        
         /* Footer styling */
         footer {
             text-align: center;
@@ -106,62 +116,72 @@
             font-size: 0.9em;
             margin-top: 40px;
         }
+        
+        /* Utility for mobile optimization */
+        .truncate-mobile {
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 100%; /* Important for truncation to work */
+        }
+        
         </style>
         <script>
         // Array of mock book data
         const books = [
             {
                 id: 1,
-                title: "Fundamentals of HTML",
+                title: "Fundamentals of HTML and Web Design Principles",
                 author: "Knowledge Gate",
                 coverUrl: "images/asdasd.png",
                 downloadLink: "https://drive.google.com/file/d/1vGB7gHiRfBNX4cTZMDPtwU75SLCnD-1H/view?usp=sharing"
             },
             {
                 id: 2,
-                title: "Calculus with Analytics Geometry",
+                title: "Calculus with Analytics Geometry: A Comprehensive Guide",
                 author: "SM Yusuf",
                 coverUrl: "https://placehold.co/400x600/f8f9fa/f59e0b?text=Math+Book",
                 downloadLink: "#"
             },
             {
                 id: 3,
-                title: "The Starfall Engine",
+                title: "The Starfall Engine: A Journey Through Time and Space",
                 author: "Juno Lin",
                 coverUrl: "https://placehold.co/400x600/f8f9fa/f59e0b?text=Fiction",
                 downloadLink: "#"
             },
             {
                 id: 4,
-                title: "Chronicles of Aethel",
+                title: "Chronicles of Aethel: The Age of Discovery",
                 author: "Morgan Reed",
                 coverUrl: "https://placehold.co/400x600/f8f9fa/f59e0b?text=Fantasy",
                 downloadLink: "#"
             },
             {
                 id: 5,
-                title: "Digital Nomad's Guide",
+                title: "Digital Nomad's Guide to Financial Independence",
                 author: "Alex Kim",
                 coverUrl: "https://placehold.co/400x600/f8f9fa/f59e0b?text=Business",
                 downloadLink: "#"
             },
             {
                 id: 6,
-                title: "The Last Alchemist",
+                title: "The Last Alchemist: Chemical Reactions and Modern Science",
                 author: "Dr. L. Thorne",
                 coverUrl: "https://placehold.co/400x600/f8f9fa/f59e0b?text=Science",
                 downloadLink: "#"
             },
             {
                 id: 7,
-                title: "Introduction to JavaScript",
+                title: "Introduction to JavaScript: ES6 and Beyond",
                 author: "Eric Elliott",
                 coverUrl: "https://placehold.co/400x600/f8f9fa/f59e0b?text=JS+Guide",
                 downloadLink: "#"
             },
             {
                 id: 8,
-                title: "Advanced CSS Layouts",
+                title: "Advanced CSS Layouts: Grid, Flexbox, and Responsiveness",
                 author: "Sarah Styles",
                 coverUrl: "https://placehold.co/400x600/f8f9fa/f59e0b?text=CSS+Book",
                 downloadLink: "#"
@@ -179,7 +199,6 @@
             const a = document.createElement('a');
             a.href = url;
             a.target = '_blank'; // Open in new tab/window
-            // a.download = title.replace(/\s/g, '_') + '.pdf'; // Suggests a filename (use if direct download is possible)
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -223,25 +242,27 @@
             } else {
                 noResultsMessage.classList.add('hidden');
                 container.innerHTML = bookList.map(book => `
-                    <div class="bg-card-light p-4 rounded-xl shadow-md transition duration-300 hover:shadow-lg flex flex-col items-center border border-gray-100">
+                    <div class="bg-card-light p-3 sm:p-4 rounded-xl shadow-md transition duration-300 hover:shadow-lg flex flex-col items-center border border-gray-100">
                         <!-- Book Cover Image -->
-                        <div class="w-full aspect-[2/3] overflow-hidden rounded-lg shadow-sm mb-4">
+                        <div class="w-full aspect-[2/3] overflow-hidden rounded-lg shadow-sm mb-3">
                             <img src="${book.coverUrl}" alt="${book.title} Cover"
                                  class="w-full h-full object-cover"
                                  onerror="this.onerror=null;this.src='https://placehold.co/400x600/ccc/333?text=No+Cover';"
                             >
                         </div>
 
-                        <!-- Book Details -->
-                        <div class="text-center w-full mb-4">
-                            <h3 class="text-lg font-bold text-text-dark mb-1" title="${book.title}">${book.title}</h3>
+                        <!-- Book Details (Responsive Text) -->
+                        <div class="text-center w-full mb-3">
+                            <!-- Title: Smaller text on mobile (text-sm) and larger on desktop (sm:text-base) with truncation -->
+                            <h3 class="text-sm sm:text-base font-bold text-text-dark mb-1 truncate-mobile" title="${book.title}">${book.title}</h3>
+                            <!-- Author: Smallest text size for secondary info -->
                             <p class="text-xs text-text-muted">Author: ${book.author}</p>
                         </div>
 
-                        <!-- Download Button -->
+                        <!-- Download Button (Full width on all sizes) -->
                         <button
                             onclick="downloadBook('${book.title.replace(/'/g, "\\'")}', '${book.downloadLink}')"
-                            class="download-button w-full py-2 px-4 bg-yellow-600 text-white font-semibold rounded-lg uppercase tracking-wider text-sm hover:bg-yellow-700"
+                            class="download-button w-full py-2 px-3 bg-yellow-600 text-white font-semibold rounded-lg uppercase tracking-wider text-sm hover:bg-yellow-700"
                         >
                             Download PDF
                         </button>
@@ -269,27 +290,27 @@
 
         // Setup the initial rendering and all event listeners when the window loads
         window.onload = () => {
-             // 1. Initial render of all books
-             renderBooks(books);
+            // 1. Initial render of all books
+            renderBooks(books);
 
-             // 2. Setup event listeners for the search feature
-             const searchInput = document.getElementById('search-input');
-             const searchButton = document.getElementById('search-btn');
+            // 2. Setup event listeners for the search feature
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-btn');
 
-             if (searchInput && searchButton) {
-                 // Real-time search as the user types
-                 searchInput.addEventListener('input', searchBooks);
+            if (searchInput && searchButton) {
+                // Real-time search as the user types
+                searchInput.addEventListener('input', searchBooks);
 
-                 // Handle search when the 'Find' button is clicked
-                 searchButton.addEventListener('click', searchBooks);
+                // Handle search when the 'Find' button is clicked
+                searchButton.addEventListener('click', searchBooks);
 
-                 // Handle search when the user presses 'Enter'
-                 searchInput.addEventListener('keypress', (e) => {
-                     if (e.key === 'Enter') {
-                         searchBooks();
-                     }
-                 });
-             }
+                // Handle search when the user presses 'Enter'
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        searchBooks();
+                    }
+                });
+            }
         };
     </script>
 </head>
@@ -306,7 +327,6 @@
         </nav>
         <!-- Search bar -->
         <div class="search-bar">
-            <!-- Changed placeholder from 'Find notes...' to 'Find books...' -->
             <input type="text" placeholder="Find books by title or author..." id="search-input">
             <button type="button" id="search-btn">Find</button>
         </div>
@@ -325,7 +345,8 @@
             </h2>
 
             <!-- Books Grid Container -->
-            <div id="books-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 sm:gap-8">
+            <!-- The grid is now more prominent on mobile with 'grid-cols-2' on all sizes -->
+            <div id="books-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 sm:gap-8">
                 <!-- Book cards will be injected here by JavaScript -->
             </div>
 
@@ -350,7 +371,7 @@
         </div>
 
     </main>
-       <footer>
+        <footer>
         <p>&copy; 2025 Books Sharing Platform</p>
     </footer>
 
