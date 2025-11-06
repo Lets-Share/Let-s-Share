@@ -1,0 +1,82 @@
+/* --- 2. Header and Navigation (Elevated Look) --- */
+
+header {
+    background-color: var(--color-light); /* White/Light background */
+    padding: 20px 80px;
+    border-bottom: none; 
+    box-shadow: 0 4px 6px rgba(207, 144, 8, 0.1); /* Subtle 3D lift */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 30px;
+}
+
+nav ul li a {
+    font-weight: 500;
+    color: var(--color-primary);
+    padding: 5px 0;
+    position: relative;
+}
+
+/* Underline effect on hover */
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    display: block;
+    margin-top: 5px;
+    background: var(--color-accent);
+    transition: width 0.3s ease;
+    left: 0;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+        /* Custom styling for the search bar to ensure it looks integrated */
+        .search-bar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .search-bar input {
+            padding: 8px 12px;
+            font-size: 14px;
+            width: 200px; /* Default desktop width */
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-bar input:focus {
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 0 1px var(--primary-accent);
+        }
+        .search-bar button {
+            background-color: var(--primary-accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+        .search-bar button:hover {
+            background-color: #000000;
+            transform: translateY(-1px);
+        }
